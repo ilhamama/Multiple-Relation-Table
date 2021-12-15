@@ -22,67 +22,82 @@ import lombok.RequiredArgsConstructor;
 public class MultipleRelationService {
 
     private final UserRepository userRepository;
-    
+
     public List<UserDto> getData(String id) {
-        if(ObjectUtils.isEmpty(id)) {
-            return userRepository.findAll()
-                .stream()
-                .map(user -> map(user))
-                .collect(Collectors.toList());
+        if (ObjectUtils.isEmpty(id)) {
+            return Optional.ofNullable(userRepository.findAll())
+                    .orElse(Collections.emptyList())
+                    .stream()
+                    .map(user -> map(user))
+                    .collect(Collectors.toList());
         } else {
             return userRepository.findById(id)
-                .map(user -> Collections.singletonList(map(user)))
-                .orElse(null);
+                    .map(user -> Collections.singletonList(map(user)))
+                    .orElse(Collections.emptyList());
         }
     }
 
-    private UserDto map(User user){
+    private UserDto map(User user) {
         return Optional.ofNullable(user)
-            .map(data -> UserDto.builder()
-                    .name(data.getName())
-                    .nationality(data.getNationality())
-                    .shops(getShops(data.getShops()))
-                    .changes(getChanges(data.getChanges()))
-                    .build())
-            .orElse(null);
+                .map(data -> UserDto.builder()
+                        .name(data.getName())
+                        .nationality(data.getNationality())
+                        .shops(Optional.ofNullable(data.getShops())
+                                .orElse(Collections.emptyList())
+                                .stream()
+                                .map(shop -> getShop(shop))
+                                .collect(Collectors.toList()))
+                        .changes(Optional.ofNullable(data.getChanges())
+                                .orElse(Collections.emptyList())
+                                .stream()
+                                .map(changes -> getChanges(changes))
+                                .collect(Collectors.toList()))
+                        .build())
+                .orElse(null);
     }
 
-    private List<UserDto.Shop> getShops(List<Shop> shops){
-        return Optional.of(shops)
-            .orElse(Collections.emptyList())
-            .stream()
-            .map(shop -> UserDto.Shop.builder()
-                .name(shop.getName())
-                .category(shop.getCategory())
-                .addresses(getAddresses(shop.getAddresses()))
-                .changes(getChanges(shop.getChanges()))
-                .build())
-            .collect(Collectors.toList());
+    private UserDto.Shop getShop(Shop shop) {
+        return Optional.of(shop)
+                .map(data -> UserDto.Shop.builder()
+                        .name(data.getName())
+                        .category(data.getCategory())
+                        .addresses(Optional.ofNullable(data.getAddresses())
+                                .orElse(Collections.emptyList())
+                                .stream()
+                                .map(address -> getAddress(address))
+                                .collect(Collectors.toList()))
+                        .changes(Optional.ofNullable(data.getChanges())
+                                .orElse(Collections.emptyList())
+                                .stream()
+                                .map(changes -> getChanges(changes))
+                                .collect(Collectors.toList()))
+                        .build())
+                .orElse(null);
     }
 
-    private List<UserDto.Address> getAddresses(List<Address> addresses){
-        return Optional.of(addresses)
-            .orElse(Collections.emptyList())
-            .stream()
-            .map(address -> UserDto.Address.builder()
-                .city(address.getCity())
-                .country(address.getCountry())
-                .postalCode(address.getPostalCode())
-                .changes(getChanges(address.getChanges()))
-                .build())
-            .collect(Collectors.toList());
+    private UserDto.Address getAddress(Address address) {
+        return Optional.of(address)
+                .map(data -> UserDto.Address.builder()
+                        .city(data.getCity())
+                        .country(data.getCountry())
+                        .postalCode(data.getPostalCode())
+                        .changes(Optional.ofNullable(data.getChanges())
+                                .orElse(Collections.emptyList())
+                                .stream()
+                                .map(changes -> getChanges(changes))
+                                .collect(Collectors.toList()))
+                        .build())
+                .orElse(null);
     }
 
-    private List<UserDto.Changes> getChanges(List<Changes> changes){
+    private UserDto.Changes getChanges(Changes changes) {
         return Optional.of(changes)
-            .orElse(Collections.emptyList())
-            .stream()
-            .map(change -> UserDto.Changes.builder()
-                .before(change.getBefore())
-                .after(change.getAfter())
-                .requestedAt(change.getCreatedDate())
-                .status(change.getStatus())
-                .build())
-            .collect(Collectors.toList());
+                .map(change -> UserDto.Changes.builder()
+                        .before(change.getBefore())
+                        .after(change.getAfter())
+                        .requestedAt(change.getCreatedDate())
+                        .status(change.getStatus())
+                        .build())
+                .orElse(null);
     }
 }
