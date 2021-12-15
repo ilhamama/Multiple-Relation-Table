@@ -3,12 +3,15 @@ package com.amajidi.personal.multiplerelationtable.Entity;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.amajidi.personal.multiplerelationtable.Entity.Base.BaseEntity;
+import com.amajidi.personal.multiplerelationtable.Enum.ShopCategory;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +29,9 @@ import lombok.experimental.SuperBuilder;
 @Entity(name = "shop")
 public class Shop extends BaseEntity {
     private String name;
-    private String category;
+
+    @Enumerated(EnumType.STRING)
+    private ShopCategory category;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

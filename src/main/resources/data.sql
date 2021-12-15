@@ -16,6 +16,6 @@ VALUES ('ADR-TEST-00001', 'SHP-TEST-00001', 'Jakarta', 'Indonesia', '10260'),
 
 INSERT INTO "changes" ("entity", "entity_id", "before", "after", "status")
 VALUES ('USER', 'USR-TEST-00001', 'Canadian', 'Indonesian', 'APPROVED'),
-       ('SHOP', 'SHP-TEST-00001', 'Johhny`s Kitchen', 'Burger King', 'REJECTED'),
+       ('SHOP', 'SHP-TEST-00003', 'Lorem`s Ticket Booth', 'Burger King', 'REJECTED'),
        ('ADDRESS', 'ADR-TEST-00002', '40100', '40110', 'APPROVED'),
        ('ADDRESS', 'ADR-TEST-00002', '40110', '40124', 'APPROVED');

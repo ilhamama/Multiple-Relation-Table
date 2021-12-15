@@ -1,6 +1,7 @@
 package com.amajidi.personal.multiplerelationtable.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 import com.amajidi.personal.multiplerelationtable.Response.UserDto;
 import com.amajidi.personal.multiplerelationtable.Service.MultipleRelationService;
@@ -25,5 +26,11 @@ public class Controller {
     public List<UserDto> getUser(@RequestParam(required = false) String id) {
         log.info("#getUser() with id : {}", id);
         return multipleRelationService.getData(id);
+    }
+
+    @GetMapping(value = "/changes")
+    public Map<String, Object> getChanges(@RequestParam Integer id) {
+        log.info("#getUser() with id : {}", id);
+        return multipleRelationService.getChanges(id);
     }
 }
