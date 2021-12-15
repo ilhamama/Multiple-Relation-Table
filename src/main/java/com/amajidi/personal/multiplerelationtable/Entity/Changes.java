@@ -1,5 +1,7 @@
 package com.amajidi.personal.multiplerelationtable.Entity;
 
+import java.time.Instant;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -19,6 +21,7 @@ public class Changes {
     
     private String entity;
     private String entityId;
+    private Instant createdDate;
     private String before;
     private String after;
     private String status;
